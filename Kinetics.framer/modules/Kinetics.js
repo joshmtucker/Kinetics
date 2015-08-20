@@ -221,6 +221,7 @@ Kinetics = (function(superClass) {
     this.closeButtonXL = new Layer($.BUTTONS.closeButtonXL);
     this.closeButtonXR = new Layer($.BUTTONS.closeButtonXR);
     this.closeButton.on(Events.Click, function() {
+      $.KINETICS.targetLayer.props = $.KINETICS.targetLayerOrigin;
       return $.KINETICS.layer.animate({
         properties: {
           scale: 0

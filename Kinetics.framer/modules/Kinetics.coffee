@@ -175,6 +175,8 @@ class Kinetics extends Layer
 
 		# ––– EVENTS
 		@closeButton.on Events.Click, ->
+			$.KINETICS.targetLayer.props = $.KINETICS.targetLayerOrigin
+
 			$.KINETICS.layer.animate
 				properties:
 					scale: 0
