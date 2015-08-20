@@ -1,5 +1,8 @@
 ### VARIABLES ###
 
+# Insert Google Roboto font
+Utils.insertCSS("@import url(//fonts.googleapis.com/css?family=Roboto")
+
 $ = 
 	KINETICS: {}
 	DEVICE: Framer.Device.phone
@@ -349,7 +352,7 @@ class Kinetics extends Layer
 		for slider in @subLayers when slider instanceof SliderComponent is true
 			slider.on "change:value", ->
 				$.ANIMATE.options.curve = "spring(#{Math.round($.KINETICS.layer.tension.value)}, #{Math.round($.KINETICS.layer.friction.value)}, #{Math.round($.KINETICS.layer.velocity.value)}, #{Math.round($.KINETICS.layer.tolerance.value * 1000)/1000})"
-				$.KINETICS.layer.curveProps.html = "<textarea onclick='this.select()' style='width:#{$.TEXT.curveProps.width}px; height:#{$.TEXT.curveProps.height}px; text-align:center; line-height:34px; color:#A0E35F; font:400 28px Roboto Mono; background-color:transparent; border:none; resize:none'>&quot;#{$.ANIMATE.options.curve}&quot;</textarea>"
+				$.KINETICS.layer.curvePropsText.value = "\"#{$.ANIMATE.options.curve}\""
 
 			slider.knob.on Events.DragEnd, ->
 				$.KINETICS.layer.animateTarget()

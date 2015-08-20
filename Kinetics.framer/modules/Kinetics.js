@@ -5,6 +5,8 @@ var $, Kinetics,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
+Utils.insertCSS("@import url(//fonts.googleapis.com/css?family=Roboto");
+
 $ = {
   KINETICS: {},
   DEVICE: Framer.Device.phone,
@@ -381,7 +383,7 @@ Kinetics = (function(superClass) {
       }
       slider.on("change:value", function() {
         $.ANIMATE.options.curve = "spring(" + (Math.round($.KINETICS.layer.tension.value)) + ", " + (Math.round($.KINETICS.layer.friction.value)) + ", " + (Math.round($.KINETICS.layer.velocity.value)) + ", " + (Math.round($.KINETICS.layer.tolerance.value * 1000) / 1000) + ")";
-        return $.KINETICS.layer.curveProps.html = "<textarea onclick='this.select()' style='width:" + $.TEXT.curveProps.width + "px; height:" + $.TEXT.curveProps.height + "px; text-align:center; line-height:34px; color:#A0E35F; font:400 28px Roboto Mono; background-color:transparent; border:none; resize:none'>&quot;" + $.ANIMATE.options.curve + "&quot;</textarea>";
+        return $.KINETICS.layer.curvePropsText.value = "\"" + $.ANIMATE.options.curve + "\"";
       });
       results.push(slider.knob.on(Events.DragEnd, function() {
         return $.KINETICS.layer.animateTarget();
