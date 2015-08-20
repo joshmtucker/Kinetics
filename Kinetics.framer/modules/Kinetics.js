@@ -74,6 +74,7 @@ $.TEXT.animateProps = {
   width: $.KINETICS.props.width - 160,
   height: 80,
   backgroundColor: "transparent",
+  name: "AnimateProps",
   ignoreEvents: false,
   propagateEvents: false
 };
@@ -82,6 +83,7 @@ $.TEXT.curveProps = {
   midX: $.KINETICS.props.width / 2,
   maxY: $.KINETICS.props.height - 20,
   width: $.KINETICS.props.width / 1.5,
+  name: "CurveProps",
   height: 40,
   backgroundColor: "transparent"
 };
@@ -92,6 +94,7 @@ $.SLIDERS.tension = {
   width: 460,
   height: 10,
   backgroundColor: "#3A3A40",
+  name: "TensionSlider",
   min: 0,
   max: 1000,
   value: 250
@@ -103,6 +106,7 @@ $.SLIDERS.friction = {
   width: 460,
   height: 10,
   backgroundColor: "#3A3A40",
+  name: "FrictionSlider",
   min: 0,
   max: 100,
   value: 45
@@ -114,6 +118,7 @@ $.SLIDERS.velocity = {
   width: 460,
   height: 10,
   backgroundColor: "#3A3A40",
+  name: "VelocitySlider",
   min: 0,
   max: 10,
   value: 0
@@ -125,6 +130,7 @@ $.SLIDERS.tolerance = {
   width: 460,
   height: 10,
   backgroundColor: "#3A3A40",
+  name: "ToleranceSlider",
   min: 0.001,
   max: 1,
   value: 0.001
@@ -136,7 +142,7 @@ $.LABELS.tension = {
   width: 110,
   height: 34,
   backgroundColor: "transparent",
-  name: "Tension"
+  name: "TensionLabel"
 };
 
 $.LABELS.friction = {
@@ -145,7 +151,7 @@ $.LABELS.friction = {
   width: 125,
   height: 34,
   backgroundColor: "transparent",
-  name: "Friction"
+  name: "FrictionLabel"
 };
 
 $.LABELS.velocity = {
@@ -154,7 +160,7 @@ $.LABELS.velocity = {
   width: 125,
   height: 34,
   backgroundColor: "transparent",
-  name: "Velocity"
+  name: "VelocityLabel"
 };
 
 $.LABELS.tolerance = {
@@ -163,7 +169,7 @@ $.LABELS.tolerance = {
   width: 141,
   height: 34,
   backgroundColor: "transparent",
-  name: "Tolerance"
+  name: "ToleranceLabel"
 };
 
 $.ANIMATE.options = {
@@ -207,6 +213,7 @@ Kinetics = (function(superClass) {
   extend(Kinetics, superClass);
 
   function Kinetics(options) {
+    var keys;
     if (options == null) {
       options = {};
     }
@@ -220,6 +227,20 @@ Kinetics = (function(superClass) {
     $.BUTTONS.closeButtonXR.superLayer = this.closeButton;
     this.closeButtonXL = new Layer($.BUTTONS.closeButtonXL);
     this.closeButtonXR = new Layer($.BUTTONS.closeButtonXR);
+    keys = [];
+    document.onkeydown = document.onkeyup = function(e) {
+      keys[e.keyCode] = e.type === "keydown";
+      if (keys[18] && keys[187]) {
+        $.KINETICS.layer.animatePropsInput.blur();
+        return $.KINETICS.layer.scale += .25;
+      } else if (keys[18] && keys[189]) {
+        $.KINETICS.layer.animatePropsInput.blur();
+        $.KINETICS.layer.scale -= .25;
+        if ($.KINETICS.layer.scale < .25) {
+          return $.KINETICS.layer.scale = .25;
+        }
+      }
+    };
     this.closeButton.on(Events.Click, function() {
       $.KINETICS.targetLayer.props = $.KINETICS.targetLayerOrigin;
       return $.KINETICS.layer.animate({
@@ -261,7 +282,18 @@ Kinetics = (function(superClass) {
     		BUG (semi): curveProps is editable
      */
     this.curveProps = new Layer($.TEXT.curveProps);
-    this.curveProps.html = "<textarea onclick='this.select()' style='width:" + this.curveProps.width + "px; height:" + this.curveProps.height + "px; text-align:center; line-height:34px; color:#A0E35F; font: 400 28px Roboto Mono; background-color: transparent; border: none; resize: none'>&quot;" + $.ANIMATE.options.curve + "&quot;</textarea>";
+    this.curvePropsText = document.createElement("textarea");
+    this.curvePropsText.style["width"] = this.curveProps.width + "px";
+    this.curvePropsText.style["height"] = this.curveProps.height + "px";
+    this.curvePropsText.style["text-align"] = "center";
+    this.curvePropsText.style["line-height"] = "34px";
+    this.curvePropsText.style["color"] = "#A0E35F";
+    this.curvePropsText.style["font"] = "400 28px Roboto Mono";
+    this.curvePropsText.style["background-color"] = "transparent";
+    this.curvePropsText.style["border"] = "none";
+    this.curvePropsText.style["resize"] = "none";
+    this.curvePropsText.value = "\"" + $.ANIMATE.options.curve + "\"";
+    this.curveProps._element.appendChild(this.curvePropsText);
     this.animatePropsInput.onclick = function() {
       this.focus();
       return this.placeholder = " ";
@@ -269,7 +301,7 @@ Kinetics = (function(superClass) {
     this.animatePropsInput.onblur = function() {
       return this.placeholder = "Add animation properties";
     };
-    return this.animatePropsInput.onkeyup = function(e) {
+    this.animatePropsInput.onkeyup = function(e) {
       var i, index, len, option, options, regex;
       if (e.keyCode === 13) {
         $.KINETICS.layer.animatePropsInput.blur();
@@ -287,6 +319,9 @@ Kinetics = (function(superClass) {
           return $.KINETICS.targetLayer.props = $.KINETICS.targetLayerOrigin;
         }
       }
+    };
+    return this.curvePropsText.onclick = function() {
+      return this.select();
     };
   };
 
@@ -346,7 +381,7 @@ Kinetics = (function(superClass) {
       }
       slider.on("change:value", function() {
         $.ANIMATE.options.curve = "spring(" + (Math.round($.KINETICS.layer.tension.value)) + ", " + (Math.round($.KINETICS.layer.friction.value)) + ", " + (Math.round($.KINETICS.layer.velocity.value)) + ", " + (Math.round($.KINETICS.layer.tolerance.value * 1000) / 1000) + ")";
-        return $.KINETICS.layer.curveProps.html = "<textarea id='curveProps' style='width:" + $.TEXT.curveProps.width + "px; height:" + $.TEXT.curveProps.height + "px; text-align:center; line-height:34px; color:#A0E35F; font:400 28px Roboto Mono; background-color:transparent; border:none; resize:none'>&quot;" + $.ANIMATE.options.curve + "&quot;</textarea>";
+        return $.KINETICS.layer.curveProps.html = "<textarea onclick='this.select()' style='width:" + $.TEXT.curveProps.width + "px; height:" + $.TEXT.curveProps.height + "px; text-align:center; line-height:34px; color:#A0E35F; font:400 28px Roboto Mono; background-color:transparent; border:none; resize:none'>&quot;" + $.ANIMATE.options.curve + "&quot;</textarea>";
       });
       results.push(slider.knob.on(Events.DragEnd, function() {
         return $.KINETICS.layer.animateTarget();
