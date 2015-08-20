@@ -1,6 +1,6 @@
 {
   "updateDelay" : -1,
-  "deviceScale" : 0.25,
+  "deviceScale" : 0.5,
   "deviceOrientation" : 0,
   "contentScale" : 1,
   "sharedPrototype" : 0,

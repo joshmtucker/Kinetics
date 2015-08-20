@@ -31,6 +31,7 @@ $.TEXT.animateProps =
 	width: $.KINETICS.props.width - 160
 	height: 80
 	backgroundColor: "transparent"
+	name: "AnimateProps"
 	ignoreEvents: false
 	propagateEvents: false
 
@@ -38,6 +39,7 @@ $.TEXT.curveProps =
 	midX: $.KINETICS.props.width/2
 	maxY: $.KINETICS.props.height-20
 	width: $.KINETICS.props.width/1.5
+	name: "CurveProps"
 	height: 40
 	backgroundColor: "transparent"
 
@@ -49,6 +51,7 @@ $.SLIDERS.tension =
 	width: 460
 	height: 10
 	backgroundColor: "#3A3A40"
+	name: "TensionSlider"
 	min: 0
 	max: 1000
 	value: 250
@@ -59,6 +62,7 @@ $.SLIDERS.friction =
 	width: 460
 	height: 10
 	backgroundColor: "#3A3A40"
+	name: "FrictionSlider"
 	min: 0
 	max: 100
 	value: 45
@@ -69,6 +73,7 @@ $.SLIDERS.velocity =
 	width: 460
 	height: 10
 	backgroundColor: "#3A3A40"
+	name: "VelocitySlider"
 	min: 0
 	max: 10
 	value: 0
@@ -79,6 +84,7 @@ $.SLIDERS.tolerance =
 	width: 460
 	height: 10
 	backgroundColor: "#3A3A40"
+	name: "ToleranceSlider"
 	min: 0.001
 	max: 1
 	value: 0.001
@@ -90,7 +96,7 @@ $.LABELS.tension =
 	width: 110
 	height: 34
 	backgroundColor: "transparent"
-	name: "Tension"
+	name: "TensionLabel"
 
 $.LABELS.friction = 
 	x: 20
@@ -98,7 +104,7 @@ $.LABELS.friction =
 	width: 125
 	height: 34
 	backgroundColor: "transparent"
-	name: "Friction"
+	name: "FrictionLabel"
 
 $.LABELS.velocity = 
 	x: 20
@@ -106,7 +112,7 @@ $.LABELS.velocity =
 	width: 125
 	height: 34
 	backgroundColor: "transparent"
-	name: "Velocity"
+	name: "VelocityLabel"
 
 $.LABELS.tolerance = 
 	x: 20
@@ -114,7 +120,7 @@ $.LABELS.tolerance =
 	width: 141
 	height: 34
 	backgroundColor: "transparent"
-	name: "Tolerance"
+	name: "ToleranceLabel"
 
 # ––– ANIMATE
 $.ANIMATE.options =
@@ -181,13 +187,12 @@ class Kinetics extends Layer
 
 			# Scale up
 			if keys[18] and keys[187]
+				$.KINETICS.layer.animatePropsInput.blur()
 				$.KINETICS.layer.scale += .25
 			else if keys[18] and keys[189]
+				$.KINETICS.layer.animatePropsInput.blur()
 				$.KINETICS.layer.scale -= .25
 				$.KINETICS.layer.scale = .25 if $.KINETICS.layer.scale < .25
-
-
-
 
 		@closeButton.on Events.Click, ->
 			$.KINETICS.targetLayer.props = $.KINETICS.targetLayerOrigin
@@ -235,7 +240,21 @@ class Kinetics extends Layer
 
 
 		@curveProps = new Layer $.TEXT.curveProps
-		@curveProps.html = "<textarea onclick='this.select()' style='width:#{@curveProps.width}px; height:#{@curveProps.height}px; text-align:center; line-height:34px; color:#A0E35F; font: 400 28px Roboto Mono; background-color: transparent; border: none; resize: none'>&quot;#{$.ANIMATE.options.curve}&quot;</textarea>"
+
+		@curvePropsText = document.createElement("textarea")
+		@curvePropsText.style["width"] = "#{@curveProps.width}px"
+		@curvePropsText.style["height"] = "#{@curveProps.height}px"
+		@curvePropsText.style["text-align"] = "center"
+		@curvePropsText.style["line-height"] = "34px"
+		@curvePropsText.style["color"] = "#A0E35F"
+		@curvePropsText.style["font"] = "400 28px Roboto Mono"
+		@curvePropsText.style["background-color"] = "transparent"
+		@curvePropsText.style["border"] = "none"
+		@curvePropsText.style["resize"] = "none"
+
+		@curvePropsText.value = "\"#{$.ANIMATE.options.curve}\""
+
+		@curveProps._element.appendChild(@curvePropsText)
 
 
 		# ––– EVENTS
@@ -266,6 +285,10 @@ class Kinetics extends Layer
 							$.ANIMATE.options.properties["#{option}"] = options[index+1]
 
 					$.KINETICS.targetLayer.props = $.KINETICS.targetLayerOrigin
+
+		# Select curve value
+		@curvePropsText.onclick = ->
+			@select()
 
 	setupSliders: ->
 		# Set superLayer for sliders
@@ -326,7 +349,7 @@ class Kinetics extends Layer
 		for slider in @subLayers when slider instanceof SliderComponent is true
 			slider.on "change:value", ->
 				$.ANIMATE.options.curve = "spring(#{Math.round($.KINETICS.layer.tension.value)}, #{Math.round($.KINETICS.layer.friction.value)}, #{Math.round($.KINETICS.layer.velocity.value)}, #{Math.round($.KINETICS.layer.tolerance.value * 1000)/1000})"
-				$.KINETICS.layer.curveProps.html = "<textarea id='curveProps' style='width:#{$.TEXT.curveProps.width}px; height:#{$.TEXT.curveProps.height}px; text-align:center; line-height:34px; color:#A0E35F; font:400 28px Roboto Mono; background-color:transparent; border:none; resize:none'>&quot;#{$.ANIMATE.options.curve}&quot;</textarea>"
+				$.KINETICS.layer.curveProps.html = "<textarea onclick='this.select()' style='width:#{$.TEXT.curveProps.width}px; height:#{$.TEXT.curveProps.height}px; text-align:center; line-height:34px; color:#A0E35F; font:400 28px Roboto Mono; background-color:transparent; border:none; resize:none'>&quot;#{$.ANIMATE.options.curve}&quot;</textarea>"
 
 			slider.knob.on Events.DragEnd, ->
 				$.KINETICS.layer.animateTarget()
