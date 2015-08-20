@@ -174,6 +174,21 @@ class Kinetics extends Layer
 		@closeButtonXR = new Layer $.BUTTONS.closeButtonXR
 
 		# ––– EVENTS
+		# Adjust size of Kinetics window with option + plus or option + minus
+		keys = []
+		document.onkeydown = document.onkeyup = (e) ->
+			keys[e.keyCode] = e.type == "keydown"
+
+			# Scale up
+			if keys[18] and keys[187]
+				$.KINETICS.layer.scale += .25
+			else if keys[18] and keys[189]
+				$.KINETICS.layer.scale -= .25
+				$.KINETICS.layer.scale = .25 if $.KINETICS.layer.scale < .25
+
+
+
+
 		@closeButton.on Events.Click, ->
 			$.KINETICS.targetLayer.props = $.KINETICS.targetLayerOrigin
 

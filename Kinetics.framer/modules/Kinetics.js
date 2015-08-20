@@ -207,6 +207,7 @@ Kinetics = (function(superClass) {
   extend(Kinetics, superClass);
 
   function Kinetics(options) {
+    var keys;
     if (options == null) {
       options = {};
     }
@@ -220,6 +221,18 @@ Kinetics = (function(superClass) {
     $.BUTTONS.closeButtonXR.superLayer = this.closeButton;
     this.closeButtonXL = new Layer($.BUTTONS.closeButtonXL);
     this.closeButtonXR = new Layer($.BUTTONS.closeButtonXR);
+    keys = [];
+    document.onkeydown = document.onkeyup = function(e) {
+      keys[e.keyCode] = e.type === "keydown";
+      if (keys[18] && keys[187]) {
+        return $.KINETICS.layer.scale += .25;
+      } else if (keys[18] && keys[189]) {
+        $.KINETICS.layer.scale -= .25;
+        if ($.KINETICS.layer.scale < .25) {
+          return $.KINETICS.layer.scale = .25;
+        }
+      }
+    };
     this.closeButton.on(Events.Click, function() {
       $.KINETICS.targetLayer.props = $.KINETICS.targetLayerOrigin;
       return $.KINETICS.layer.animate({
