@@ -1,7 +1,7 @@
-### VARIABLES ###
-
 # Insert Google Roboto font
-Utils.insertCSS("@import url(//fonts.googleapis.com/css?family=Roboto")
+Utils.insertCSS("@import url(//fonts.googleapis.com/css?family=Roboto+Mono")
+
+### VARIABLES ###
 
 $ = 
 	KINETICS: {}
@@ -18,10 +18,31 @@ $.KINETICS.props =
 	midY: $.DEVICE.height/2 
 	width: (700 * $.DEVICE.scale) + (700 * (1-$.DEVICE.scale))
 	height: (400 * $.DEVICE.scale) + (400 * (1-$.DEVICE.scale))
-	scale: 0
+	scale: .5
+	options: 0
 	backgroundColor: "#151517"
 	superLayer: $.DEVICE
 	targetLayer: {}
+
+$.KINETICS.open = 
+	layer: null
+	properties: {scale: 1, opacity: 1}
+	curve: "spring(245, 40, 0)"
+	curveOptions: {}
+	time: 1
+	delay: 0
+	repeat: 0
+	debug: false
+
+$.KINETICS.close = 
+	layer: null
+	properties: {scale: .5, opacity: 0}
+	curve: "spring(345, 40, 0)"
+	curveOptions: {}
+	time: 1
+	delay: 0
+	repeat: 0
+	debug: false
 
 # ––– BUTTONS
 $.BUTTONS.closeButton = {maxX: $.KINETICS.props.width - 28, y: 28, width: 24, height: 24, backgroundColor: "transparent"}
@@ -47,7 +68,6 @@ $.TEXT.curveProps =
 	backgroundColor: "transparent"
 
 # ––– SLIDERS
-
 $.SLIDERS.tension = 
 	x: 200
 	y: 107
@@ -158,10 +178,8 @@ Framer.CurrentContext.on "layer:create", (layer) ->
 
 			###
 
-			$.KINETICS.layer.animate
-					properties:
-						scale: 1
-					curve: "spring(345, 40, 0)"
+			# Show Kinetics window
+			$.KINETICS.layer.animate $.KINETICS.open
 
 class Kinetics extends Layer
 	constructor: (options={}) ->
@@ -188,25 +206,32 @@ class Kinetics extends Layer
 		document.onkeydown = document.onkeyup = (e) ->
 			keys[e.keyCode] = e.type == "keydown"
 
+			# 18 = Option key
+			# 187 = + key
+			# 189 = - key
+
 			# Scale up
 			if keys[18] and keys[187]
 				$.KINETICS.layer.animatePropsInput.blur()
-				$.KINETICS.layer.scale += .25
+				$.KINETICS.layer.animate
+					properties:
+						scale: $.KINETICS.layer.scale + .25
+					curve: "spring(345, 40, 0)"
 			else if keys[18] and keys[189]
 				$.KINETICS.layer.animatePropsInput.blur()
-				$.KINETICS.layer.scale -= .25
+				$.KINETICS.layer.animate
+					properties:
+						scale: $.KINETICS.layer.scale - .25
+					curve: "spring(345, 40, 0)"
 				$.KINETICS.layer.scale = .25 if $.KINETICS.layer.scale < .25
 
 		@closeButton.on Events.Click, ->
 			$.KINETICS.targetLayer.props = $.KINETICS.targetLayerOrigin
 
-			$.KINETICS.layer.animate
-				properties:
-					scale: 0
-				curve: "spring(345, 40, 0)"
+			$.KINETICS.layer.animate $.KINETICS.close
 
-				$.KINETICS.layer.on Events.AnimationEnd, ->
-					$.KINETICS.layer.destroy()
+			Utils.delay .5, ->
+				$.KINETICS.layer.destroy()
 
 		@setupText()
 		@setupSliders()
