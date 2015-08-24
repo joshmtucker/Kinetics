@@ -1,5 +1,5 @@
 # Insert Google Roboto font
-Utils.insertCSS("@import url(//fonts.googleapis.com/css?family=Roboto+Mono")
+Utils.insertCSS("@import url(https://fonts.googleapis.com/css?family=Roboto+Mono);")
 
 ### VARIABLES ###
 
