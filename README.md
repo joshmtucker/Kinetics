@@ -1,29 +1,44 @@
 # Kinetics
-Easily test spring animations on any layer in your Framer Studio project. Created by Joshua Tucker and Richard Burton.
+Test spring animations on any layer in your Framer Studio project without having to reload. Created with [Richard Burton](https://twitter.com/ricburton "Richard Burton").
 
-## How to include in your project
-Download Kinetics.framer, navigate to /modules and add Kinetics.coffee to the /modules folder of your project.
+## How to use
+Add *Kinetics.coffee* to the */modules/* folder of your Framer project.
 
-In your Framer project, put this line at the very top.
+Reference the module inside your Framer project.
 
 ```coffeescript
 {Kinetics} = require "Kinetics"
 ```
 
-## How to use
-It's easy! On any layer in your Framer project, option + click it to show the Kinetics window.
+### Controls
+Open Kinetics Window – ⌥ + Click (Option key + Mouse click)
 
-Add properties you want to animate by typing them into the input field like so:
+Zoom In on Kinetics Window – ⌥+ (Option key + Plus key)
 
-```coffeescript
-x: 200, y: 300, scale: .5
-```
+Zoom Out on Kinetics Window – ⌥- (Option key + Minus key)
 
-After adding your properties, hit the return key to submit.
+Move – Click + drag
 
-Each time you change a value, the animation restarts. Clicking on any knob also starts the animation using the curve values you have set.
+### Properties
 
-## Future
+Add properties you want to animate by typing them into the input field as shown above. After adding your properties, hit the enter (return) key to submit.
+
+Each time you change the properties inside the input field, the layer will return to its starting position.
+
+#### Notes
+* The starting position of the layer (and all of its properties) are captured when the Kinetics window is opened.
+* Opening the Kinetics window may conflict with events in your project. Unfortunately, unavoidable. I am open to suggestions on a different shortcut to open the Kinetics window that wouldn't conflict
+* If the layer changes because of some event triggered while opening the Kinetics window, the layer's position and properties will be reset when you submit inside the input field
+
+### Animate!
+
+Once you have submitted your properties, change the sliders to test out the animation on the layer. Each time you change a value, the animation restarts. Clicking on any knob also starts the animation using the curve values you have set.
+
+#### Paste curve into your project
+The curve is a selectable string. Click it to select it, copy, and paste it directly into your code editor.
+
+## Upcoming
+
 We are pushing towards adding more types of curves (i.e. bezier) and really optimizing every bit of this experience. We are aware there are many aspects to improve on, but you gotta start somewhere right? :) 
 
 We'll need your help to squash every bug, fix every minor issue, and tweak the experience to make it as effective as possible. Let us know if you encounter any problems or have suggestions for improvement.
