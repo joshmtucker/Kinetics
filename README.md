@@ -1,6 +1,8 @@
 # Kinetics
 Test spring animations on any layer in your Framer Studio project without having to reload. Created with [Richard Burton](https://twitter.com/ricburton "Richard Burton").
 
+For a walkthrough tutorial, watch this [YouTube video](http://youtu.be/TH7phW5KK08 "Kinetics Tutorial").
+
 ## How to use
 Add *Kinetics.coffee* to the */modules/* folder of your Framer project.
 
