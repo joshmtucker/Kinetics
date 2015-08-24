@@ -11,7 +11,8 @@ Reference the module inside your Framer project.
 ```
 
 ### Controls
-Open Kinetics Window – ⌥ + Click (Option key + Mouse click)
+![Controls](https://raw.github.com/joshmtucker/Kinetics/master/readmeImages/controls.gif)
+Open Kinetics Window – ⌥ + Click (Option key + Mouse click) on the layer you want to animate
 
 Zoom In on Kinetics Window – ⌥+ (Option key + Plus key)
 
@@ -19,7 +20,10 @@ Zoom Out on Kinetics Window – ⌥- (Option key + Minus key)
 
 Move – Click + drag
 
+Close – Click X button
+
 ### Properties
+![Properties](https://raw.github.com/joshmtucker/Kinetics/master/readmeImages/properties.gif)
 
 Add properties you want to animate by typing them into the input field as shown above. After adding your properties, hit the enter (return) key to submit.
 
@@ -31,6 +35,7 @@ Each time you change the properties inside the input field, the layer will retur
 * If the layer changes because of some event triggered while opening the Kinetics window, the layer's position and properties will be reset when you submit inside the input field
 
 ### Animate!
+![Animate](https://raw.github.com/joshmtucker/Kinetics/master/readmeImages/animate.gif)
 
 Once you have submitted your properties, change the sliders to test out the animation on the layer. Each time you change a value, the animation restarts. Clicking on any knob also starts the animation using the curve values you have set.
 
