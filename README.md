@@ -12,6 +12,7 @@ Reference the module inside your Framer project.
 
 ### Controls
 ![Controls](https://raw.github.com/joshmtucker/Kinetics/master/readmeImages/controls.gif)
+
 Open Kinetics Window – ⌥ + Click (Option key + Mouse click) on the layer you want to animate
 
 Zoom In on Kinetics Window – ⌥+ (Option key + Plus key)
